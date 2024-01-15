@@ -1,0 +1,62 @@
+\begin{titlepage}
+	\thispagestyle{empty}
+	\begin{center}
+		\begin{figure}[h!]
+			\centering
+			\includegraphics[width=0.5\textwidth]{Preamble/io-sea-logo}
+		\end{figure}
+
+		\vspace*{3\baselineskip}
+
+		{\large\textbf{EuroHPC-01-2019}}
+
+		\vspace*{2\baselineskip}
+
+		\begin{figure}[h!]
+			\centering
+			\includegraphics[width=0.2\textwidth]{Preamble/flag_yellow}
+		\end{figure}
+
+		\vspace*{2\baselineskip}
+
+		{\Large\textbf{IO-SEA}}
+
+		\vspace*{1.5\baselineskip}
+
+		{\Large\textbf{IO -- Software for Exascale Architectures}}\\
+		{\textbf{Grant Agreement Number: 955811}}
+
+		\vspace*{1.5\baselineskip}
+
+		{\Large\textbf{\id}}\\
+		{\large\textbf{\name}}
+
+		\vspace*{1.5\baselineskip}
+
+		{\large\textit{\textbf{\status}}}\\
+	\end{center}
+
+	\vspace*{4\baselineskip}
+
+	\begin{tabularx}{\textwidth}{l >{\raggedright\let\\\tabularnewline}X}
+		\textbf{Version:} & \version \\
+		\textbf{Author(s):} & \authors \\
+		\textbf{Contributor(s):} & \contributors \\
+		\textbf{Date:} & \dateI
+	\end{tabularx}
+ 
+	\begin{tikzpicture}[overlay]
+		\def\pt{\paperwidth/3}
+		\def\plm{1in}
+		\def\ptm{1in}
+		\def\phs{.76\paperheight}
+		\def\phe{.8\paperheight}
+		\fill[color=ioseared] (-\plm, \phs) rectangle (-\plm+\pt, \phe);
+		\fill[color=ioseagreen] (-\plm+\pt, \phs) rectangle (-\plm+2\pt, \phe);
+		\fill[color=ioseablue] (-\plm+2\pt, \phs) rectangle (-\plm+3\pt, \phe);
+
+		\draw[color=ioseagrey] (-\plm, \phs) rectangle (-\plm+\pt, \phe);
+		\draw[color=ioseagrey] (-\plm+\pt, \phs) rectangle (-\plm+2\pt, \phe);
+		\draw[color=ioseagrey] (-\plm+2\pt, \phs) rectangle (-\plm+3\pt, \phe);
+	 \end{tikzpicture}
+\end{titlepage}

@@ -1,0 +1,240 @@
+% To uncomment if the document status is final (if you do not use the `make final` command)
+%\def\myfixmestatus{final}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% packages                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{paralist}
+\usepackage{multirow}
+\usepackage[nogroupskip,toc, style=alttreegroup,nonumberlist,nogroupskip]{glossaries}
+\usepackage{cmap}
+\usepackage[scaled]{helvet}
+\usepackage[default,scale=0.98]{sourcecodepro}
+\renewcommand\familydefault{\sfdefault}
+\usepackage[T1]{fontenc}
+\usepackage{booktabs}
+\usepackage{textcomp}
+\usepackage{microtype}
+\usepackage{rotating}
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+\usepackage{wrapfig}
+\usepackage[headsepline=.5pt]{scrlayer-scrpage}
+\usepackage{tabularx}
+\usepackage{framed}
+\usepackage{xcolor}
+\usepackage{chngcntr}
+\usepackage{scrhack}
+\usepackage{listings}
+\usepackage{lstautogobble}
+\usepackage{zi4}
+\usepackage{subcaption}
+\usepackage{longtable}
+\usepackage[inline,shortlabels]{enumitem}
+
+
+%adding float package to better control float placement
+\usepackage{float}
+%must come before the hyperref package or autorefs are broken
+
+\usepackage[hidelinks]{hyperref}
+\usepackage[capitalize]{cleveref}
+\usepackage[a4paper,left=2.5cm,right=2.5cm,top=2.5cm,bottom=2cm,includeheadfoot]{geometry}
+\ifx\myfixmestatus\undefined
+\usepackage[status=draft]{fixme}
+\else
+\usepackage[status=\myfixmestatus]{fixme}
+\fi
+\usepackage[boxed]{algorithm2e}
+\usepackage{multicol}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{url}
+\pgfplotsset{compat=1.16}
+\usepackage{natbib}
+\usepackage{pdfpages}
+
+
+\usetikzlibrary{shadings,%
+                calc,%
+                positioning,%
+                fit,%
+                matrix,%
+                shadows,%
+                chains,%
+                arrows,%
+                shapes,%
+                patterns,%
+                pgfplots.units,%
+                shapes.symbols,%
+                shapes.arrows,
+                spy,%
+                fadings}
+\usepgfplotslibrary{groupplots}
+\usepackage[detect-all]{siunitx}
+\usepackage{fmtcount}
+\usepackage[all]{nowidow}
+\usepackage[figure,table]{totalcount}
+\usepackage{fancyvrb}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% global configuration                 %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pdfsuppresswarningpagegroup=1
+\pagestyle{scrheadings}
+%\clearscrheadfoot
+\clearpairofpagestyles 
+
+\setkomafont{pageheadfoot}{\normalfont}
+\lohead{\bfseries{\id}}
+\rohead{\bfseries{\name}}
+\lofoot{\bfseries{IO-SEA - 955811}}
+\cofoot{\thepage}
+\rofoot{\dateI}
+\colorlet{shadecolor}{gray!25}
+\counterwithout{figure}{chapter}
+\counterwithout{table}{chapter}
+\renewcommand*{\chapterheadstartvskip}{\vspace*{-\topskip}}
+\renewcommand{\chapterpagestyle}{scrheadings}
+\renewcommand{\contentsname}{Table of Contents}
+\setcounter{tocdepth}{1}
+
+\renewcommand{\arraystretch}{1.2}
+
+\fxsetup{%
+	multiuser,
+	layout=inline,
+	theme=color,
+	inlineface=\bfseries,
+	envface=\bfseries
+}
+% authors and contributors
+\FXRegisterAuthor{nn}{ann}{NN} % N.N.
+\FXRegisterAuthor{mm}{amm}{MM} % M.M.
+% ... add more people as needed
+%
+% reviewers
+\FXRegisterAuthor{rr}{arr}{rr} % R.R.
+% ... add more people as needed
+
+%%% DEEP-SEA specific commands
+\newcommand{\fabricube}{fabri\textthreesuperior}
+\newcommand{\Fabricube}{Fabri\textthreesuperior}
+\newcommand{\IsquareC}{I\texttwosuperior{}C}
+
+\definecolor{palette-dark-1}{RGB}{140,81,10}
+\definecolor{palette-mid-1}{RGB}{191,129,45}
+\definecolor{palette-normal-1}{RGB}{223,194,125}
+\definecolor{palette-light-1}{RGB}{246,232,195}
+\definecolor{palette-light-2}{RGB}{199,234,229}
+\definecolor{palette-normal-2}{RGB}{128,205,193}
+\definecolor{palette-mid-2}{RGB}{53,151,143}
+\definecolor{palette-dark-2}{RGB}{1,102,94}
+
+\definecolor{ioseagreen}{RGB}{166, 183, 39}
+\definecolor{ioseaorange}{RGB}{246, 146, 0}
+\definecolor{ioseablue}{RGB}{56, 106, 207}
+
+\definecolor{ioseared}{RGB}{233, 83, 39}
+\definecolor{ioseayellow}{RGB}{254, 195, 6}
+
+\definecolor{ioseagrey}{RGB}{131, 131, 131}
+\definecolor{iosealblue}{RGB}{79, 147, 185}
+
+\definecolor{bluekeywords}{rgb}{0.13, 0.13, 1}
+\definecolor{greencomments}{rgb}{0, 0.5, 0}
+\definecolor{redstrings}{rgb}{0.9, 0, 0}
+\definecolor{graynumbers}{rgb}{0.5, 0.5, 0.5}
+\lstset{%
+	autogobble,
+	columns=fullflexible,
+	showspaces=false,
+	showtabs=false,
+	breaklines=true,
+	showstringspaces=false,
+	breakatwhitespace=true,
+	escapeinside={(*@}{@*)},
+	commentstyle=\color{greencomments},
+	keywordstyle=\color{bluekeywords},
+	stringstyle=\color{redstrings},
+	numberstyle=\color{graynumbers},
+	basicstyle=\ttfamily\small,
+	frame=l,
+	framesep=12pt,
+	xleftmargin=12pt,
+	tabsize=4,
+	captionpos=b
+}
+
+\crefname{algocf}{alg.}{algs.}
+\Crefname{algocf}{Algorithm}{Algorithms}
+
+\pgfplotsset{
+    discard if/.style 2 args={
+        x filter/.append code={
+            \edef\tempa{\thisrow{#1}}
+            \edef\tempb{#2}
+            \ifx\tempa\tempb
+                \def\pgfmathresult{}
+            \fi
+        }
+    },
+    discard if not/.style 2 args={
+        x filter/.append code={
+            \edef\tempa{\thisrow{#1}}
+            \edef\tempb{#2}
+            \ifx\tempa\tempb
+            \else
+                \def\pgfmathresult{}
+            \fi
+        }
+    }
+}
+\pgfplotsset{filter discard warning=false}
+
+
+% YAML Listing Style
+\newcommand\YAMLcolonstyle{\color{red}\mdseries}
+\newcommand\YAMLkeystyle{\color{black}\bfseries}
+\newcommand\YAMLvaluestyle{\color{blue}\mdseries}
+
+\makeatletter
+
+% here is a macro expanding to the name of the language
+% (handy if you decide to change it further down the road)
+\newcommand\language@yaml{yaml}
+
+\expandafter\expandafter\expandafter\lstdefinelanguage
+\expandafter{\language@yaml}
+{
+  keywords={true,false,null,y,n},
+  keywordstyle=\color{darkgray}\bfseries,
+  basicstyle=\ttfamily\footnotesize,                                 % assuming a key comes first
+  sensitive=false,
+  comment=[l]{\#},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\YAMLvaluestyle\ttfamily,
+  moredelim=[l][\color{orange}]{\&},
+  moredelim=[l][\color{magenta}]{*},
+  moredelim=**[il][\YAMLcolonstyle{:}\YAMLvaluestyle]{:},   % switch to value style at :
+  morestring=[b]',
+  morestring=[b]",
+  literate =    {---}{{\ProcessThreeDashes}}3
+                {>}{{\textcolor{red}\textgreater}}1     
+                {|}{{\textcolor{red}\textbar}}1 
+                {\ -\ }{{\mdseries\ -\ }}3,
+}
+
+% switch to key style at EOL
+\lst@AddToHook{EveryLine}{\ifx\lst@language\language@yaml\YAMLkeystyle\fi}
+\makeatother
+
+\newcommand\ProcessThreeDashes{\llap{\color{cyan}\mdseries-{-}-}}
+
+\renewcommand{\chapterautorefname}{Chapter} %Capitalize Chapters
+\renewcommand{\sectionautorefname}{Section} %Capitalize Sections
+\renewcommand{\subsectionautorefname}{Subsection} %Capitalize Sections
+
+\renewcommand*{\figureformat}{\figurename~\thefigure} %Remove dot after figure number in caption
