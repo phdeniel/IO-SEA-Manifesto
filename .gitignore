@@ -1,0 +1,19 @@
+*.toc
+*.mtc*
+*.blg 
+*.bbl 
+*.ist 
+*.aux 
+*.out
+*.glo
+*.acn
+*.log 
+*/*.aux 
+*.maf
+*.mlt* 
+ *.mlf* 
+*.lot 
+*.lof
+
+
+
