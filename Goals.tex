@@ -9,19 +9,22 @@ software stack. We should first quickly summarize them.
 Let's take a few seconds and have a look at the backmirror. The very first paragraph of the IO-SEA proposal 
 clearly states the ambitions and goals of the project, which are described at this:
 
-\paragraph{}
-\textit{
+\begin{quotation}
 IO-SEA aims to provide a novel data management and storage platform for exascale computing based on hierarchical
-storage management (HSM) and on-demand provisioning of storage services. The platform will efficiently make use of
-storage tiers spanning NVMe and NVRAM at the top all the way down to least active data stored with tape-based
-technologies. System requirements are driven by data intensive use-cases, in a very strict co-design approach. The
-concept of ephemeral data nodes and data accessors is introduced that allows users to flexibly operate the system,
-using various well-known data access paradigms, such as POSIX namespaces, S3/Swift Interfaces, MPI-IO and other
-middleware, data formats and protocols. These ephemeral resources eliminate the problem of treating storage
-resources as static and unchanging system components – which is not a tenable proposition for data intensive
-exascale environments. The methods and techniques are applicable to exascale class data intensive applications and
-workflows that need to be deployed in highly heterogeneous computing environments.
-}
+storage management (HSM) and on-demand provisioning of storage services. The platform will efficiently make use
+of storage tiers spanning NVMe and NVRAM at the top all the way down to least active data stored with tape-based
+technologies. System requirements are driven by data intensive use-cases, in a very strict co-design approach.
+The concept of ephemeral data nodes and data accessors is introduced that allows users to flexibly operate the
+system, using various well-known data access paradigms, such as POSIX namespaces, S3/Swift Interfaces, MPI-IO 
+and other middleware, data formats and protocols. These ephemeral resources eliminate the problem of treating
+storage resources as static and unchanging system components – which is not a tenable proposition for data
+intensive exascale environments. The methods and techniques are applicable to exascale class data intensive
+applications and workflows that need to be deployed in highly heterogeneous computing environments.
+\end{quotation}
+
+\section{Highlights from the proposal}
+In this section, we'll shortly remind the technological choices made in IO-SEA, as well as the underlying
+concepts that drove the development of IO-SEA. 
 
 \paragraph{}
 The proposal then states which technologies and technical approaches to be fostered and leveraged:
@@ -108,4 +111,19 @@ to use such resource managers, we will introduce two ideas to also handle storag
     
     \item Data nodes: ephemeral services need hardware to run on, those nodes are called ‘data nodes’. They have affinities with simulation nodes, which helps the resource manager choose data nodes that are close enough to compute nodes in terms of network location. Data nodes are a resource of the supercomputer, like compute nodes, and as such must be managed by a resource manager.
 \end{itemize}
- 
+
+\section{IO-SEA, the MSA and the SEA legacy}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{FIGS/MSA.png}
+    \caption[The Modular Supercomputer Architecture]{ Data Nodes and Ephemeral Services within the MSA}
+    \label{fig:msa}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{FIGS/iosea-swstack.png}
+    \caption[IO-SEA software stack]{ The components of the IO-SEA software stack}
+    \label{fig:iosea-sw-stack}
+\end{figure}
