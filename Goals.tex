@@ -86,7 +86,7 @@ those tracks:
     
     \item a direct consequence of the introduction of the concepts of datasets and namespaces are data nodes ans
     ephemeral services. As storage resourcves as clearly not infinite, batch environments today should schedule the usage of storage capacity and bandwidth. Ephemeral services, running on dedicated data nodes, themselves 
-    closely acquainted with some compute nodes are introduced. Ephemeral servers may have different kinds or 
+    closely acquainted with some compuofte nodes are introduced. Ephemeral servers may have different kinds or 
     flavors. They are IO server, spawned on demand and associated to a set of compute jobs, are working as
     dedicated IO servers for those compute jobs. It works both as an IO proxy server and as a bridge capable of
     translating the underlying object stores semantics to a different IO semantics. 
@@ -114,6 +114,11 @@ to use such resource managers, we will introduce two ideas to also handle storag
 
 \section{IO-SEA, the MSA and the SEA legacy}
 
+IO-SEA is not a standalone project, it is part of the "SEA legacy", a group of three projects funded under the
+same EuroHPC JU call. The three projects target the Exascale era: the DEEP-SEA develops HPC middle-ware and
+software, RED-SEA develops a new hardware and software network architecture while IO-SEA provides new storage
+paradigm. All the projects go together and have strong interactions.
+
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{FIGS/MSA.png}
@@ -121,9 +126,69 @@ to use such resource managers, we will introduce two ideas to also handle storag
     \label{fig:msa}
 \end{figure}
 
+\paragraph{}
+At the very core of this strong collaboration relies the Modular Supercomputing Architecture (MSA). MSA is made
+of building blocks, or modules, each module having its own specific resources (for example GPU, or neuromorphic
+processors). In this scope, it's quite natural to define a "IO module" which will hosts the IO-SEA data nodes
+and run most of the server side IO-SEA software stack. With this approach, IO-SEA fits in the MSA as defined 
+in figure \ref{fig:msa} . 
+
+
+\section{The IO-SEA software components and their relationships}
+
+This section describes how the different components of the IO-SEA infrastructure interact. The core of IO-SEA is
+made of two object stores. Originally those object stores were the MOTR object store from Seagate, and Phobos an
+open-source object store developed at CEA. The big picture of the IO-SEA software stack is described by figure
+\ref{fig:iosea-sw-stack}. 
+
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{FIGS/iosea-swstack.png}
     \caption[IO-SEA software stack]{ The components of the IO-SEA software stack}
     \label{fig:iosea-sw-stack}
 \end{figure}
+
+Phobos is capable of dealing with tapes. MOTR is capable of dealing with a tiered storage stack, with
+different kinds of disks. MOTR is HSM-ready (this is a direct outcome from the SAGE project). Those two object
+stores inter-operates via a specifically designed HSM interface. In the run of the IO-SEA project, this component
+gave birth to the HESTIA component, with a new and well defined API for HSM management.
+
+\paragraph{}
+On top of those HSM connected object stores, advanced interfaces are required, for object stores have very 
+simple semantics\footnote{In particular, this makes it possible to scale object store very well}. For the 
+majority of use cases, other interfaces are required to implement. For example, POSIX or NFS semantics are to 
+be implemented. Dedicated servers are required, those are the ephemeral services. Original ephemeral services as
+described in the original proposal includes NFS interface, Burst Buffers with POSIX interface, and S3 interface.
+Ephemeral services offer this kind of feature, acting as "bridges" between the objects store semantics (typically
+the CRUD semantics) and more complex semantics (like filesystem semantics offered by POSIX or NFS). 
+
+\paragraph{}
+Interacting with elaborated middleware, such as those involved and developed in the scope of the DEEP-SEA 
+project, is very important. This approach as lead to the design of the Data Access Storage Interface (DASI).
+
+DASI helps the user defining a way to address his scientific data. The user can so define elements composing a 
+key that can be use to efficiently addressed the scientific data, with full compliance to the research domain. 
+The DASI will then organise the data in a smart way, making all the necessary actions to have this storage
+using correctly the object stores and the HESTIA interface. 
+
+DASI will help in implementing other pieces of middle-ware, and may be accelerated by dedicated agents, to be
+used as ephemeral services. 
+
+\paragraph{}
+Ephemeral services are designed to be attached to some computes jobs: they are dedicated to a compute job or a
+set of compute jobs logically chained together. An ephemeral service are strongly associated with their clients
+and serve only those clients, on the other side, the clients (the compute jobs) will \textbf{only} do IO via
+the ephemeral services. As the compute job starts, the related ephemeral server starts as well, and when the 
+compute job ends, the data and metadata are flushed to the object store and the ephemeral service is stopped.
+
+In order to run ephemeral servers, dedicated machines are required. Those machines are called \textit{data nodes}
+and should be clearly identified. As seen above, and as shown in figure \ref{fig:msa}, they are grouped into
+a specific module with the MSA. 
+
+\paragraph{}
+Dedicated software is required to manage the association between the ephemeral services and the compute jobs. 
+This lead to the development of the workflow management.
+
+On the other hand, a Policy Engine is needed to manage the data movement between the different level in the
+tiered storage stack. The Robinhood software, developed at CEA, was used and modified to deal with this feature.
+
