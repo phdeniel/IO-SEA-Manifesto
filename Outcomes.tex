@@ -63,6 +63,35 @@ TO BE COMPLETED
 
 TO BE COMPLETED: HESTIA / PHOBOS / KVSNS / GRH
 
+Several outcomes come from the WP4. During the three years of the project, it became obvious that a clear 
+management of a generic HSM made it necessary to have a defined API and a defined architecture. This API, name HESTIA (ADD MEANING OF THE ACRONYM), make this possible. HESTIA is not attached to any feature of a given object 
+store. In IO-SEA, it brings all the tools needed to implement the HSM feature between Phobos and another object
+store.
+
+PHOBOS, or \textit{Parallel Heterogeneous OBject Store}, is an object store developed at CEA and available as an
+open-source software. PHOBOS existed before the beginning of IO-SEA, but was strongly improved during the three
+years of the project. In particular, PHOBOS was enhanced with the following features (LISTS OF THOSE FEATURE
+AS A ITEMIZE ENVIRONMENT). 
+
+KVSNS is a library that makes it possible to implement a POSIX semantic on top of the services provided by an
+object store and a key-value store. KVSNS was originally developed in the run of the SAGE and SAGE2 project, but
+the related version was not capable of managing object store with only a CRUD\footnote{Create Read Update Delete}
+interface, the object store had to be capable of performing random I/O operations in objects, just like POSIX
+does via the \verb|pread()| or \verb|pwrite()| from the LibC. Inside IO-SEA, KVSNS gain a new feature, making it
+capable of dealing with CRUD-only obbject store. This required the introduction of a local filesystem used as
+a cache and a way to fetch and dispose entry from/to this cache. This logic should not be a bottleneck, it should
+be implemented as a fully parallel and distributed service. This lead to the development of the GRH feature.
+
+ADD KVSNS SCHEMA
+
+ADD GRH SCHEMA
+
+GRH gets request issued by the KVSNS library itself, or externally. It creates an asynchronous request id that
+can be used by the client to get the status of the request in an asynchronous way. GRH implement workers and 
+tasks queues. GRH is based on the Celery framework, which is strongly parallel. GRH could be used outside its
+original scope.In particular, GRH can be used to implement a data mover. 
+
+
 \section{Outcomes from WP5}
 
 DASI AND INTERFACES TO DASI
