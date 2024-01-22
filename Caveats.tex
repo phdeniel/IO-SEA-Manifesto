@@ -1,0 +1,125 @@
+\chapter{Caveats and things to be completed}
+
+This chapter describes the caveats encountered during the run of the project and how they were solved and/or
+worked around.
+
+\paragraph{}
+Other aspects appeared during the run of the project: some collateral features were not foreseen at the time the
+proposal was written, which means that no "PM time" was allocated to developing those tasks. They were not 
+implemented in IO-SEA but "placeholders" have been installed to implement their future implementation.  This could
+be part of a follow-up to IO-SEA, leveraging the outcomes of IO-SEA. 
+
+\section{Disappearance of MOTR}
+
+The MOTR object stored was abandoned by Seagate during the run of the project, and it was no longer maintained as
+an open-source software. The IO-SEA project did not have the required task force to perform that maintenance, so 
+it was decided to stop using MOTR.
+
+This action was not very impacting. The interfaces between the different components were based, as much as 
+possible, on well established standards. In particular, it was decided to avoid to use API only used in a single
+product when alternatives existed, or use the specific API as well as a more "opened" one. This is why all the
+interactions with MOTR could be made via the dedicated MOTR API as well as S3. MOTR came with an efficient S3 
+server which helped in following that path. 
+
+When the specific MOTR API had to used, this was isolated in a well identified layer. This was done in the 
+KVSNS library and inside the DASI. 
+
+Finally, replacing MOTR by some other object stores was not a problem. It has been proofed that other object
+store, such as CEPH/RADOS could be used instead of MOTR. Other object stores, like DAOS, could be used as well 
+with relatively minor interfaces to be implemented. The "coding surface" is rather small and clearly stated in
+the different WP's deliverables. 
+
+\section{Authentication and user management}
+
+IO-SEA does not explicitly manage the users. It embeds no specific user authentication, nor explicit API to 
+define precisely who can access the object, not define Access Control Lists (ACLs). Io-SEA relies on the user
+management in each of this component. This was no blocker in the run of the project, for every component was
+based on similar and/or compatible paradigms, but a more rigorous approach should implement such a feature. 
+
+This aspect was not foreseen as the proposal was written, it became visible as the project advanced. Since the 
+situation did not lead to issues, it was decided to implement to authentication and user management, but to 
+implement, inside the IO-SEA software stack, the required "placeholders".
+
+
+Placeholders are empty functions, or commented calls in the code, describing where authentication and user 
+management should be considered. A later implementation of those features will benefit from those placeholders, 
+saving the time to identify the point of contacts with the existing software.
+
+Implementation of Authentication and User Management should be done by creating at least two new components:
+\begin{itemize}
+    \item the \textbf{Key Master}:~this component should manage authentication. A credential structure should be
+    defined, and this component should provide ways to create this structure, via information provided by the 
+    user. This could be typically be done by leveraging paradigms from the \textit{Kerberos~5} ecosystem.
+    
+    \item the \textbf{Gate Keeper}:~each dataset, namespace, or even objects in IO-SEA, should be associated
+    with an Access Control List (ACL) that describes who can access it in which manner. For example, one could
+    allow all the members of a group to read it, not allow updates or modifications only to a few users (seen 
+    as "administrators of this entity")). The users wanting to access an entity should expose their credentials
+    to have it compared to the entity's ACL. If this matches, the user is allowed and can perform the action, 
+    otherwise the access is denied and the user receives an error. 
+
+\end{itemize}
+
+Since the architecture of the IO-SEA is designed to run on exascale ready system, there should be no bottleneck
+which means that Gate Keeper and Key Master should have multiple instances, in order to keep the storage's
+scalability on both data and metadata. This is not a simple challenge, for security feature generally enforce the
+use of a central, not replicated, database describing the given authorizations. 
+
+\section{Accounting and storage space management}
+
+This feature is strongly related to the previous one. As user are clearly identified by their credentials, it
+becomes easy, from a central point of view, to keep tracks of the storage volume, form both a data and a metadata
+perspective, are allocated to or consumed by a user, a group of users or a project. As this storage space is 
+accounted, it becomes possible to implemented limits and fences, making it possible to avoid "over burning" of
+resources by some users, leading to starve other users. Too greedy users should be blocked, via a dedicated 
+error, similar to POSIX error ENOSPC, blocking the user accesses. 
+
+The instant use of network resources (typically the network bandwidth) can be accounted as well, aside the 
+storage media use. 
+
+Implementing such a feature is quite a major challenge, like accounting it requires a central database which
+is difficult to replicate. Having a strict space management in a massively distributed architecture as the
+IO-SEA one lead to apparently contradictory choices. This would require to study which smart compromises could
+be adopted in order to define a new component to be implemented. 
+
+\section{Expand the concept of dataset and namespace}
+
+The workflow management is based on two concepts: the \textbf{datasets} and the \textbf{namespaces}. 
+
+Datasets are "baskets full of data", they gather pieces of data that have "good reasons" to be used together. For
+example, a dataset could represent the results of an experiment, or the input or results of a simulation run. 
+
+Datasets are currently unstructured. A specific object exists inside one and only one dataset, it is never shared
+between two different dataset. The dataset drive the accesses to data, compute jobs need some datasets to be 
+used in a read-only or read-write manner and the workflow manager makes sure that no conflict occurs during that 
+action. 
+
+Namespaces are implementing given semantics on top of datasets. For example, a POSIX namespace will provide a 
+POSIX interface to the dataset, and a S3 namespace will bring an S3 interface. Fundamentally, one can consider
+that the difference between datasets and namespaces is similar to the difference between data and metadata: 
+namespaces describe how to organise metadata in order to access the data belonging to a dataset. Several 
+namespaces can theoretically be associated with a dataset. 
+
+An ephemeral service implements and instantiates namespaces on top of datasets. For example, the NFS-Ganesha
+ephemeral service will implement a NFS namespace on top of datasets and bring NFS semantics to client compute 
+nodes. 
+
+\subsection{Making namespaces aware of the Key Master and the Gate Keeper}
+
+The namespaces often maps objects inside object stores to another semantics. For example, POSIX or NFS could map 
+objects as files. Records in the namespaces have ACLs, that should be compliant with the ACLs of the dataset as
+managed by the Gate Keeper. For example, if a dataset is access in read-only and exposed via NFS, then all files
+should have only read-only compatible ACLs. 
+
+\subsection{Subsets inside datasets}
+
+Current implementation of datasets only contains objects. So far, they are very similar to S3 buckets. It would
+be natural to make datasets capable of containing other datasets. This approach makes datasets closer to POSIX
+directories. This introduces the ideas that datasets have subsets, which are themselves datasets, dataset 
+definition would become recursive.
+
+In such a situation, a "sub dataset" could have its own ACLs. How should it be considered if a different and
+potentially conflicting ACL is exposed in a "lower" or "upper" dataset. Policies are to be defined, such as 
+ways to define such policies. Once a choice is made, impacts on the implementation of the Gate Keeper and the 
+Key Master should be defined and managed. 
+

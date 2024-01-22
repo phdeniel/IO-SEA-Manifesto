@@ -1,3 +1,71 @@
 \chapter{Outcomes of the IO-SEA project}
 
-Lorem Ipsum
+The different outcomes are directly related to the different work packages of the project. This is why they are
+exposed WP after WP.
+
+As a reminder, the technical Work Packages are
+\begin{itemize}
+    \item \textbf{Work Package \#1~:} \textit{Use Case and Co-design~:} this WP primarily characterizes the use
+    cases and provides a detailed understanding of the requirements which is then used to develop an initial
+    blueprint of the IO-SEA system, including all the components of the infrastructure. The work package also
+    works on the adaptation of these use cases to fit to the IO-SEA architecture.
+    
+    \item \textbf{Work Package \#2~:} \textit{Data Workflow and Ephemeral~:} this WP focuses on providing an
+    on-demand data access environment suitable for the needs of applications and workflows within the IO-SEA
+    project. The on-demand data access environment will be Ephemeral – that is, it will be provisioned and
+    available only during the runtime of the workflow. At the end of the workflow, the data access environment is
+    torn down and any data and state are flushed to the backend storage tiers.
+    
+    \item \textbf{Work Package \#3~:} \textit{Instrumentation and Monitoring~:} this WP focuses on collecting and
+    analysing Applications and Workflows IO behaviour, as well as IO infrastructure health. The information will
+    be used to take optimum dimensioning and placement decisions when launching new instances of workflows.
+    
+    \item \textbf{Work Package \#4~:} \textit{Hierarchical Storage Management Feature~:} this WP aims is to
+    provide Hierarchical Storage Management (HSM) for the IO-SEA architecture, making it capable of managing
+    storage “NVMe to Tapes” tiers including various types of devices (NVRAM, Flash, SSD, HDD and Tapes). This is
+    achieved by using together two object stores: the Mero Object store from Seagate and Phobos, a tape-based open
+    source object store developed by CEA. 
+    
+    \item \textbf{Work Package \#5~:} \textit{Application Interfaces~:} this WP focuses on the interfaces exposed
+    by the data placement and storage system. Requirements identified in WP1 will help shaping the API that will
+    be offered to applications. This API will enable applications to interact with the system, describing data
+    flow as managed by WP2 and storage policies used by WP4. The use-cases described in WP1 will be adapted to 
+    use the API.
+\end{itemize}
+
+\section{Outcomes from WP1}
+
+\section{Outcomes from WP2}
+
+The main outcomes from the second work package are related to the creation of the workflow manager. Since
+ephemeral service are strongly associated to compute jobs, the following schema is to be respected
+\begin{enumerate}
+    \item allocate the compute nodes to run the simulation jobs
+    \item allocate the data nodes in order to run the ephemeral services
+    \item start the ephemeral services
+    \item make the ephemeral services accessible to the compute nodes, for example mounting a NFS share
+    exposed via a NFS ephemeral service
+    \item run the simulation
+    \item if several steps are involved in the simulation, run the other steps of the simulation
+    \item end the simulation
+    \item flush the data to the persistent storage (typically the object stores)
+    \item stop the ephemeral services
+    \item release the data nodes and the compute nodes
+\end{enumerate}
+
+The WP2 made all the development to achieve this schema, TO BE COMPLETED
+
+\section{Outcomes from WP3}
+
+TO BE COMPLETED
+
+\section{Outcomes from WP4}
+
+TO BE COMPLETED: HESTIA / PHOBOS / KVSNS / GRH
+
+\section{Outcomes from WP5}
+
+DASI AND INTERFACES TO DASI
+
+
+
