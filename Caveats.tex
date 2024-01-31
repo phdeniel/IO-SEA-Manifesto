@@ -123,29 +123,48 @@ potentially conflicting ACL is exposed in a "lower" or "upper" dataset. Policies
 ways to define such policies. Once a choice is made, impacts on the implementation of the Gate Keeper and the 
 Key Master should be defined and managed. 
 
+\section{Bulletproof and replicated storage}
+
+Reliability of storage is a topic that could be implemented on top of the existing IO-SEA software stack. It is
+very common, in storage systems, to integrate inner mechanisms for manage errors produced by the underlying 
+hardware or even misbehavior from the end-users. RAID disks are good examples of this kind of feature. 
+
+The IO-SEA software stack does not take care of this reliability, it makes the explicit assumption that no
+failure occurs as the storage media are used. IO-SEA relies on the reliability features offered by the hardware
+and the high-availability feature embeded in lower levels of the software stack, located "under" the components
+of the IO-SEA. 
+
+Further development, based on the IO-SEA software stack could give ways to expose features to build bulletproof
+storage. For example, the concept of \textit{replica} could be introduced. We can imagine that dataset could be
+written in several subset ate the same time, producing a main copy and a secondary copy at the same time. This 
+would be very close do "mirror RAID". Other RAID feature could be introduced in the dataset behavior, such as 
+spare storage and detection of failure, with automatic rebuilds of failed storage devices. 
+
+More specifically, it would be interesting to investigate how the HESTIA API and the HSM feature could be 
+extended. Datasets and the ways to implement them on object could to sophisticated in order to provide those new
+features. 
+
 \section{Other kinds of ephemeral services}
 
-FAIRE DES CHOSES AVEc LUSTRE
-
 Ephemeral services in IO-SEA are designed to implement namespaces in order to expose the contents of datasets, 
-they are closely remated to object stores. This concept could be extended to other kinds of services.
+they are closely related to object stores. This concept could be extended to other kinds of services.
 
-One of them is related to Lustre and scratch filesystems. So called "scratch" file systems are usually places 
-where simulation could put their temporary data. They operare as a temporary file system, but often with parallel
+One of them is related to Lustre and scratch file-systems. So called "scratch" file systems are usually places 
+where simulation could put their temporary data. They operate as a temporary file system, but often with parallel
 features. Most of the time, they are implemented as Lustre, or GPFS instances. 
 
-It is quite logical to imagine having ephemeral scratch filesystems: as the simulation starts, it allocates a
-temporary scratch filesystem, implementing a temporary Lustre. As the simumation ends, the temporary data can
+It is quite logical to imagine having ephemeral scratch file-systems: as the simulation starts, it allocates a
+temporary scratch file-system, implementing a temporary Lustre. As the simulation ends, the temporary data can
 be deleted as they are now useless. The file system itself can disappear. 
 
 A track to be investigated would be to have data nodes ready for implementing Lustre OSS, MGS and MDS
-\footnote{those kinds of servers are the backbone of a Lustre infratructure}. As the compute job starts, some
-of those nodes are allocated to run a defined Lustre configuration and offer a scratch filesystem. Those
+\footnote{those kinds of servers are the backbone of a Lustre infrastructure}. As the compute job starts, some
+of those nodes are allocated to run a defined Lustre configuration and offer a scratch file-system. Those
 OSS, MDS and MGS are ephemeral services, forming a temporary Lustre. 
 
 Extending the concepts of ephemeral services to small clusters of ephemeral services would make it possible to 
-instantiate ephemeral Lustre services, that could offer ephemeral scratch filesystem. This track is quite
+instantiate ephemeral Lustre services, that could offer ephemeral scratch file-system. This track is quite
 interesting in an exascale perspective, for the temporary workload is easy to separate from the other IO patterns
-of a simulation run, and often responsible for the greediest workloads. Having scrtach filesystem run in 
+of a simulation run, and often responsible for the greediest workloads. Having scratch filesystem run in 
 ephemeral ways would help in isolating this potentially "toxic" I/O workload to a subset of the storage system,
 avoiding interference with other simulation codes and make scalability easier. 
