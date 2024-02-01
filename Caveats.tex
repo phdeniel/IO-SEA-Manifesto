@@ -144,6 +144,27 @@ More specifically, it would be interesting to investigate how the HESTIA API and
 extended. Datasets and the ways to implement them on object could to sophisticated in order to provide those new
 features. 
 
+\section{Energy efficiency from the storage point of view}
+
+Energy efficiency is quite an important topic in the very large exascale systems. In particular, the main 
+point of interest is data movement. Moving data costs a lot : network infrastructures are required in order to
+provide a large enough bandwidth, with a well adapted topology involving routers at the right place. The 
+ephemeral server paradigm, as exposed in the IO-SEA project makes it possible to keep most of the I/O operations
+local to a subset of the whole architecture. This actually reduce the data movement, because every use of the
+network keep the movement inside the scope of a single router, or very few routers. 
+
+On the other hand, storing data costs as well, in particular when stored on disks because disks need to be
+powered all the time, this is a reason why tapes are not a "blast from the past" but definitely a technology
+that will continue to exist in the future. The tapes technology breaks the dependency between the I/O bandwidth
+and the storage capacity : the bandwidth is driven by the number of tape drives while the capacity is driven
+by the number of tapes. Both parameters are fully de-correlated. This aspect is very important, you do not 
+need to buy more storage devices because you need more bandwidth but you do not need actually the association
+extension of the capacity. At the same time, tapes do not consume power as they are unused, they are inert 
+object which are active only when inserted in a tape drive. They are important piece of data storage for 
+cold data. Paradigm such as object stores using tapes, like the Phobos object store, developed at CEA and 
+supported by the WP4 of IO-SEA. Such a feature needs to have connections between tapes and disks, and a stong
+HSM implementation as what the HESTIA feature of IO-SEA provides. 
+
 \section{Other kinds of ephemeral services}
 
 Ephemeral services in IO-SEA are designed to implement namespaces in order to expose the contents of datasets, 
