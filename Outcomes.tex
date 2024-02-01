@@ -35,6 +35,59 @@ As a reminder, the technical Work Packages are
 
 \section{Outcomes from WP1}
 
+The WP1 has been a crucial team within the IO-SEA. The IO-SEA proposal has set the emphasis on the co-design
+approach, all those efforts were focused in this work package. 
+
+During the run of the IO-SEA, strong interactions has existed between the different WP which definitely did not
+work "in silo mode", but all worked as a single team. The figure \ref{fig:white-board} shows an screen copy
+of a white board produced during one of those brainstorming session. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{FIGS/white-board.png}
+    \caption[Co-design whiteboard]{ Screen capture of IO-SEA whiteboard co-design brainstorm session}
+    \label{fig:white-board}
+\end{figure}
+
+Several key ideas came out from those co-design effort, in particular
+\begin{itemize}
+    \item \textbf{interactive data access:~} In all phases of the project, it is important for scientific use
+    cases to have interactive access to the data sets and namespaces used in the workflow, e.g., to stage initial
+    data in setup; to check output, peek at meta-data or even begin analysis while the workflow is running; to
+    run interactive data analysis tools post-workflow.
+    
+    \item \textbf{Prompted tape archival/retrieval:~} The experience of scientific users at large HPC centres is
+    that the time to move large datasets to or from tape can sometimes be measured in days. Therefore it is
+    important that the users have an interface to trigger data retrieval from the tape long before a workflow is
+    queued.
+    
+    \item \textbf{Tape-disk explicit copy:~} Much of the discussion regarding the IO-SEA storage hierarchy has
+    used the phrase “data- movement”. As the tape archive is a tier in the storage hierarchy — the slowest but
+    most capacious tier, use cases clarified that they rarely “move” data to or from the tape archive systems.
+    This occurs normally only in response to suddenly needing to make space on a nearly-full disk. Rather the
+    normal pattern is often that data is generated that has both near- term and long term uses and a copy is
+    saved to tape for safe-keeping, while the bulk may remain on disk for further immediate access. Likewise,
+    when older data is retrieved from tape for new analysis, it is usually copied to disk; the tape archive is
+    not erased. This clarification has resulted in the inclusion of copy functionality of the datamover.
+    
+    \item \textbf{Pre-fetching to data node:~} Similarly, users in environments where compute-node time is
+    charged against a budget ex- pressed concern that they be able to pre-fetch files to the data nodes so that
+    the compute nodes do not idle when the allocation starts. Again, the solution provided in response was the
+    datamovers, which will also allow users to prompt data movement to the flash storage. 
+    
+    \item \textbf{DASI-to-POSIX staging application:~} Several scientific use-case tasks expressed interest in
+    exploring the proposed DASI as a method of organizing stored scientific data. However, to integrate DASI
+    directly into the application generally requires significant re-writes to I/O libraries. In cases where the
+    application is a large, widely-used community code, this is impractical and beyond the scope of the IO-SEA
+    project. Instead, the use-case tasks have requested a stand-alone application that can translate a POSIX path
+    to DASI semantic keys and copy a file back and forth between DASI and POSIX storage. This will enable us to
+    explore the advantages of DASI with a low barrier to entry. Work Package~5 has indicated they intend to
+    produce such an application in the coming months in response to this request. In anticipation of this,
+    Section 5.1 provides an example of how this might be integrated into a workflow with the GBF ephemeral
+    service.
+\end{itemize}
+
+
 \section{Outcomes from WP2}
 
 The main outcomes from the second work package are related to the creation of the workflow manager. Since
